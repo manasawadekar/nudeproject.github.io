@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nude Project UI Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+    }
+
+    .top-bar {
+        background-color: #3a1e1e;
+        color: white;
+        text-align: center;
+        padding: 5px;
+        font-size: 12px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 25px; /* Height of the top-bar */
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 30px;
+        background-color: white;
+        z-index: 999;
+    }
+
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      position: relative;
+    }
+
+    .nav-left a,
+    .nav-right a {
+      text-decoration: none;
+      color: #000;
+      position: relative;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-left a:hover::after,
+    .nav-right a:hover::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #000;
+      bottom: 0;
+      left: 0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3a1e1e;
+    }
+
+    .nav-item {
+      position: relative;
+      display: inline-block;
+    }
+
+    .nav-item > a {
+      padding: 10px 15px;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav-item:hover .dropdown {
+      display: flex;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      width: 100vw; /* full screen width */
+      display: none;
+      padding: 20px 40px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 40px;
+      box-sizing: border-box;
+    }
+
+    .dropdown-column {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .dropdown-column b {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #3a1e1e;
+    }
+
+    .dropdown-column a {
+      display: block;
+      margin-bottom: 8px;
+      color: #222;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .dropdown-column a:hover {
+      color: #3a1e1e;
+      text-decoration: underline;
+    }
+
+    .collections-link {
+      position: relative;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: black;
+    }
+
+    .collections-carousel {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      width: 100vw;
+    }
+
+    .carousel-container {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
+
+    .carousel-item {
+      width: 200px;
+      flex: 0 0 auto;
+      text-align: center;
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .carousel-item p {
+      margin: 10px 0 5px;
+      font-weight: 500;
+    }
+
+    .carousel-item span {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* Show carousel on hover */
+    .nav-item:hover .collections-carousel {
+      display: block;
+    }
+    /* Dummy dropdown styles */
+    .dummy-dropdown {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px 20px;
+      display: none;
+      z-index: 999;
+      width: 200px;
+      font-size: 13px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item:hover .dummy-dropdown {
+      display: block;
+    }
+
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      top: 120px;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    .product-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .gallery {
+      flex: 3;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .gallery img,
+    .gallery video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border: 1px solid #eee;
+    }
+
+    .details {
+      flex: 1;
+      padding-left: 2rem;
+      position: sticky;
+      top: 120px; /* how far from the top it sticks */
+      height: fit-content;
+      background: #fff;
+    }
+
+    .details h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .details .price {
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      background-color: #4a2c2a;
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border: none;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn:hover{
+        background-color: white;
+        color: #4a2c2a;
+        border: 1px solid #4a2c2a;
+        /* border-color: #4a2c2a; */
+    }
+
+    .recommendation {
+      margin-top: 2rem;
+      width: 100%;
+    }
+
+    .recommendation h3 {
+      margin-bottom: 1rem;
+    }
+
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .recommendation-grid img {
+      width: 100%;
+      height: auto;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding: 40px 60px 20px;
+      background-color: #fff;
+      border-top: 1px solid #3a1e1e;
+      color: #3a1e1e;
+    }
+
+    .footer-columns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+
+    .footer-column {
+      flex: 1;
+      min-width: 150px;
+      margin-right: 20px;
+    }
+
+    .footer-column h4 {
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .footer-column a {
+      display: block;
+      text-decoration: none;
+      color: #3a1e1e;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .footer-column a:hover {
+      text-decoration: underline;
+    }
+
+    .newsletter {
+      flex: 2;
+      min-width: 250px;
+    }
+
+    .newsletter h4 {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .newsletter p {
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .newsletter input[type="email"] {
+      padding: 10px;
+      border: 1px solid #3a1e1e;
+      width: 60%;
+      font-size: 14px;
+    }
+
+    .newsletter button {
+      padding: 10px 20px;
+      background-color: #3a1e1e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .newsletter button:hover {
+      background-color: white;
+      color: #3a1e1e;
+      border: 1px solid #3a1e1e; /* optional: adds border on hover */
+    }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 13px;
+      border-top: 1px solid #3a1e1e;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+      }
+
+      .nav-left,
+      .nav-right {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .banner-block-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dropdown,
+      .collections-carousel {
+        position: static;
+        width: 100%;
+      }
+
+      .carousel-item {
+        width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        Free Shipping Spain Over 100€ | Worldwide Over 200€
+    </div>
+    
+    <div class="navbar">
+        <div class="nav-left">
+          <div class="nav-item"><a href="#">Man</a>
+            <div class="dropdown">
+              <div class="dropdown-column">
+                <b>New Arrivals</b>
+                <a href="#">Most Wanted</a>
+                <a href="#">Más Vino Jaja</a>
+              </div>
+              <div class="dropdown-column">
+                <a href="#">Hoodies</a>
+                <a href="#">Sweatshirts</a>
+                <a href="#">T-Shirts</a>
+                <a href="#">Knitwear</a>
+                <a href="#">Shirts | Polos</a>
+                <a href="#">Pants</a>
+                <a href="#">Jeans</a>
+                <a href="#">Shorts</a>
+                <a href="#">Outerwear</a>
+                <a href="#">Swimwear</a>
+              </div>
+              <div class="dropdown-column">
+                <a href="#">Accessories</a>
+                <a href="#">Headwear</a>
+                <a href="#">Jewelry</a>
+                <a href="#">Bags | Leather Goods</a>
+                <a href="#">Underwear</a>
+                <a href="#">Objects</a>
+              </div>
+              <div class="dropdown-column">
+                <a href="#">Cult</a>
+                <a href="#">Origins</a>
+                <a href="#">Bambino</a>
+                <a href="#">Nude Project X Sebago</a>
+                <a href="#">Nude Project X Ronaldinho</a>
+                <a href="#">Timeless Basics</a>
+              </div>
+              <div class="dropdown-column">
+                <a href="#">Shop By Look</a>
+                <a href="#">Gift Card</a>
+              </div>
+            </div>
+          </div>
+    
+          <div class="nav-item">
+            <div class="nav-item">
+              <a href="#">Woman</a>
+              <div class="dropdown">
+                <div class="dropdown-column">
+                  <b>New Collections</b>
+                  <a href="#">Just Dropped</a>
+                  <a href="#">Most Loved</a>
+                </div>
+                <div class="dropdown-column">
+                  <a href="#">Tops</a>
+                  <a href="#">Dresses</a>
+                  <a href="#">Skirts</a>
+                  <a href="#">T-Shirts</a>
+                  <a href="#">Sweaters</a>
+                  <a href="#">Jackets</a>
+                </div>
+                <div class="dropdown-column">
+                  <a href="#">Bottoms</a>
+                  <a href="#">Jeans</a>
+                  <a href="#">Trousers</a>
+                  <a href="#">Shorts</a>
+                  <a href="#">Leggings</a>
+                </div>
+                <div class="dropdown-column">
+                  <a href="#">Accessories</a>
+                  <a href="#">Bags</a>
+                  <a href="#">Jewelry</a>
+                  <a href="#">Scarves</a>
+                  <a href="#">Hair Accessories</a>
+                </div>
+                <div class="dropdown-column">
+                  <a href="#">Shop by Look</a>
+                  <a href="#">Gift Ideas</a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+    
+          <div class="nav-item">
+            <a href="#" class="collections-link">Collections</a>
+            <div class="dropdown">
+              <div class="collections-carousel">
+                <div class="carousel-container">
+                  <div class="carousel-item" onclick="window.location.href='man.html'">
+                    <img src="images/images/webpage1/Screenshot 2025-04-14 at 12.16.33ΓÇ»PM.png" alt="Product 1" />
+                    <p>Bambino | Man</p>
+                  </div>
+                  <div class="carousel-item" onclick="window.location.href='woman.html'">
+                    <img src="images/images/webpage1/Screenshot 2025-04-14 at 12.16.44ΓÇ»PM.png" alt="Product 2" />
+                    <p>Bambino | women</p>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/images/webpage1/Screenshot 2025-04-14 at 12.16.55ΓÇ»PM.png" alt="Product 3" />
+                    <p>Men's Most Wanted</p>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/images/webpage1/Screenshot 2025-04-14 at 12.17.08ΓÇ»PM.png" alt="Product 4" />
+                    <p>Woman's Most Wanted</p>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="images/images/webpage1/Screenshot 2025-04-14 at 12.17.21ΓÇ»PM.png" alt="Product 4" />
+                    <p>Men's Outerwear</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+    
+          <div class="nav-item">
+            <a href="#">Stores</a>
+            <div class="dummy-dropdown">
+              Visit our flagship stores in Barcelona and Madrid. Find locations, hours, and exclusive in-store events.
+            </div>
+          </div>
+    
+          <div class="nav-item">
+            <a href="#">Key Members</a>
+            <div class="dummy-dropdown">
+              Meet the creative minds behind the Nude Project. Stories, interviews, and highlights of our community leaders.
+            </div>
+          </div>
+        </div>
+    
+        <div class="logo">Nude<sup>®</sup>Project</div>
+    
+        <div class="nav-right">
+          <a href="#">IN | INR ₹</a>
+          <a href="#">Account</a>
+          <a href="#">Search</a>
+          <a href="#">Cart (0)</a>
+        </div>
+    </div>
+
+  <main class="container">
+    <div class="product-section">
+      <div class="gallery">
+        <img src="images/images/webpage3/JUICY_CHERRY_TEE_WHITE_back.jpeg" alt="Product 1">
+        <video controls width="100%" autoplay muted loop poster="https://via.placeholder.com/300x300">
+            <source src="images/images/webpage3/11ea3b50b45f449f97479490598d50de.HD-1080p-7.2Mbps-45245999.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <img src="images/images/webpage3/JUICY_CHERRY_TEE_WHITE_front_1000x.jpeg" alt="Product 3">
+        <img src="images/images/webpage3/NUDEPROJECT_BAMBINO_ECOMM2601_1000x.jpeg" alt="Product 4">
+        <img src="images/images/webpage3/IMG_2159_1000x.jpeg" alt="Product 5">
+        <img src="images/images/webpage3/a_400e7f6a-9135-4c72-9576-e876f80ad532_1000x.jpeg" alt="Product 6">
+        <img src="images/images/webpage3/JUICY_CHERRY_TEE_WHITE_detail_1000x.jpeg" alt="Product 7">
+      </div>
+      <div class="details">
+        <h2>Juicy Cherry Tee White</h2>
+        <div class="price">Rs. 4,100</div>
+        <button class="btn">Add to Cart</button>
+        <button class="btn">Buy Now</button>
+        <p>Shipping & Returns available</p>
+      </div>
+    </div>
+    </main>
+
+    <section class="recommendation">
+      <h3>You may also like</h3>
+      <div class="recommendation-grid">
+        <img src="images/images/webpage3/Screenshot 2025-04-19 at 10.15.34ΓÇ»PM.png" alt="Alt 1">
+        <img src="images/images/webpage3/Screenshot 2025-04-19 at 10.15.51ΓÇ»PM.png" alt="Alt 2">
+        <img src="images/images/webpage3/Screenshot 2025-04-19 at 10.16.07ΓÇ»PM.png" alt="Alt 3">
+        <img src="images/images/webpage3/Screenshot 2025-04-19 at 10.16.28ΓÇ»PM.png" alt="Alt 4">
+        <img src="images/images/webpage3/Screenshot 2025-04-19 at 10.16.48ΓÇ»PM.png" alt="Alt 5">
+        <img src="images/images/webpage3/Screenshot 2025-04-18 at 11.27.59ΓÇ»AM.png" alt="Alt 6">
+        <img src="images/images/webpage3/Screenshot 2025-04-18 at 11.27.14ΓÇ»AM.png" alt="Alt 7">
+        <img src="images/images/webpage3/Screenshot 2025-04-18 at 11.07.03ΓÇ»AM.png" alt="Alt 8">
+        <img src="images/images/webpage3/Screenshot 2025-04-18 at 11.29.09ΓÇ»AM.png" alt="Alt 9">
+        <img src="images/images/webpage3/Screenshot 2025-04-18 at 2.35.23ΓÇ»PM.png" alt="Alt 10">
+      </div>
+    </section>
+
+  <div class="footer">
+    <div class="footer-columns">
+      <div class="footer-column">
+        <h4>Brand</h4>
+        <a href="#">Stores</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-column">
+        <h4>Boring Stuff</h4>
+        <a href="#">Legal Notice</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <a href="#">Returns</a>
+        <a href="#">Order Tracking</a>
+        <a href="#">Faq</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="newsletter">
+        <h4>Join the Movement</h4>
+        <p>Sign up to our email list and get 10% off your first order</p>
+        <input type="email" placeholder="Email address" />
+        <button>Join</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      Nude Project &copy;
+    </div>
+  </div>
+</body>
+</html>
